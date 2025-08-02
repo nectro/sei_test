@@ -1,0 +1,18 @@
+{
+  "name": "instacall",
+  "version": "1.0.0",
+  "description": "a voice agent for automated answers",
+  "license": "ISC",
+  "author": "sam",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0"
+  }
+}
