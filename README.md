@@ -146,12 +146,7 @@ graph TD
     X -->|No| Y["Thank You Message<br/>Hangup"]
     
     T --> Z["Agent Connected<br/>End AI Session"]
-    U --> D
-    
-    style A fill:#e1f5fe
-    style J fill:#f3e5f5
-    style T fill:#e8f5e8
-    style Z fill:#e8f5e8
+    U --> E
 ```
 
 ### 🔄 Flow Summary

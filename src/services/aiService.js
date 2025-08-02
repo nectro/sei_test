@@ -68,7 +68,7 @@ class AIService {
           return {
             topic,
             answer: data.answer,
-            needsAgent: this.shouldTransferToAgent(topic)
+            needsAgent: false
           };
         }
       }
@@ -89,7 +89,7 @@ class AIService {
           return {
             topic,
             answer: data.answer,
-            needsAgent: this.shouldTransferToAgent(topic)
+            needsAgent: false
           };
         }
       }
@@ -112,14 +112,6 @@ class AIService {
     }
     
     return matchedWords / Math.max(inputWords.length, questionWords.length);
-  }
-
-  /**
-   * Check if topic needs agent transfer
-   */
-  static shouldTransferToAgent(topic) {
-    const agentTopics = ['technical', 'urgent', 'support'];
-    return agentTopics.includes(topic);
   }
 
   /**
