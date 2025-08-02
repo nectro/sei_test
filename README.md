@@ -4,7 +4,6 @@ A simple and focused Node.js voice agent built with Twilio TwiML for automated c
 
 ## 🚀 Features
 
-- **Smart Voice Responses** - AI-powered voice interactions
 - **Knowledge Base** - Supabase-powered question and keyword matching
 - **Agent Transfer** - Seamless handoff to human agents
 - **24/7 Support** - Always available voice assistant
@@ -16,27 +15,28 @@ A simple and focused Node.js voice agent built with Twilio TwiML for automated c
 instacall/
 ├── src/
 │   ├── config/           # Configuration
-│   │   ├── constants.js  # App constants
-│   │   ├── environment.js # Environment config
-│   │   └── supabase.js   # Supabase client
+│   │   ├── index.js      # Unified config (environment + constants)
+│   │   └── supabase.js   # Supabase client setup
 │   ├── controllers/      # Request handlers
-│   │   └── voiceController.js # Voice endpoints (3 only)
+│   │   └── voiceController.js # Voice endpoints (greeting, process-input, transfer-agent)
 │   ├── middleware/       # Express middleware
-│   │   ├── errorHandler.js
-│   │   ├── requestLogger.js
-│   │   └── validateTwilio.js
+│   │   ├── errorHandler.js    # Global error handling
+│   │   ├── requestLogger.js   # HTTP request logging
+│   │   └── validateTwilio.js  # Twilio webhook validation
 │   ├── routes/          # API routes
-│   │   └── voice.js     # 3 voice endpoints
+│   │   └── voice.js     # Voice endpoint routes
 │   ├── services/        # Business logic
-│   │   ├── aiService.js # Question/keyword matching
-│   │   └── knowledgeBaseService.js # Supabase integration
+│   │   ├── aiService.js # Speech processing & matching logic
+│   │   └── knowledgeBaseService.js # Supabase database integration
 │   └── utils/           # Utilities
-│       ├── logger.js    # Call logging
-│       └── twimlGenerator.js # TwiML templates
-├── index.js             # Application entry point
-├── supabase_knowledge_base.sql # Database setup
-├── package.json
-└── .env.example         # Environment template
+│       ├── logger.js    # Structured logging (call, speech, transfer)
+│       └── twimlGenerator.js # TwiML XML response templates
+├── index.js             # Application entry point & server setup
+├── package.json         # Dependencies & scripts
+├── package-lock.json    # Locked dependency versions
+├── .env.example         # Environment variables template
+├── .gitignore          # Git ignore patterns
+└── README.md           # Project documentation
 ```
 
 ## 🛠 Installation
@@ -158,9 +158,7 @@ graph TD
 
 ## 🔒 Security
 
-- **Webhook Validation** - Verifies requests are from Twilio
 - **Environment Variables** - Secure credential storage
-- **Supabase RLS** - Row-level security enabled
 
 ## 🚀 Development
 
@@ -176,8 +174,6 @@ graph TD
 ## 🧠 Knowledge Base
 
 ### 📊 Knowledge Base Structure
-- **6 Topics** - Company, availability, support, technical, urgent, greeting
-- **36 Questions** - Predefined natural language questions
 - **Smart Matching** - 70% similarity threshold for questions
 - **Keyword Fallback** - Exact keyword matching
 - **Agent Transfer** - Auto-transfer for technical/urgent/support topics
@@ -190,11 +186,9 @@ You can manage and configure your knowledge base using our web interface:
 
 Features available in the web interface:
 - ✅ **Add/Edit Questions** - Manage predefined questions for each topic
-- ✅ **Keyword Management** - Configure fallback keywords
-- ✅ **Topic Configuration** - Set up new topics and categories  
+- ✅ **Keyword Management** - Configure fallback keywords 
 - ✅ **Answer Templates** - Create and edit response templates
 - ✅ **Testing Interface** - Test your knowledge base matching
-- ✅ **Export/Import** - Backup and restore your configuration
 
 **Note:** After updating your knowledge base through the web interface, the changes will automatically sync with your Supabase database and be available to your voice agent immediately.
 
