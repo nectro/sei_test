@@ -1,4 +1,4 @@
-const config = require('../config/constants');
+const config = require('../config');
 
 /**
  * Generate TwiML responses for different voice scenarios

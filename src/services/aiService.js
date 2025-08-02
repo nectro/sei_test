@@ -4,7 +4,7 @@
 
 const KnowledgeBaseService = require('./knowledgeBaseService');
 const { logInfo } = require('../utils/logger');
-const config = require('../config/constants');
+const config = require('../config');
 
 class AIService {
   /**
@@ -132,7 +132,7 @@ class AIService {
       needsAgent: matchResult.needsAgent,
       followUp: matchResult.needsAgent ? 
         'Would you like me to connect you with an agent?' : 
-        'Is there anything else I can help you with?'
+        'Is there anything else I can help you with?  If not, feel free to disconnect the call at your convenience.'
     };
   }
 }

@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const config = require('./src/config/environment');
+const config = require('./src/config');
 
 // Import routes
 const voiceRoutes = require('./src/routes/voice');

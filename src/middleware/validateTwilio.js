@@ -6,12 +6,14 @@ const { logError } = require('../utils/logger');
  * This ensures requests are actually from Twilio
  */
 function validateTwilioSignature(req, res, next) {
+  const config = require('../config');
+  
   // Skip validation in development if no auth token is set
-  if (process.env.NODE_ENV === 'development' && !process.env.TWILIO_AUTH_TOKEN) {
+  if (config.isDevelopment && !config.TWILIO_AUTH_TOKEN) {
     return next();
   }
 
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const authToken = config.TWILIO_AUTH_TOKEN;
   if (!authToken) {
     logError('Twilio auth token not configured - server configuration error');
     return res.status(500).json({ error: 'Server configuration error' });

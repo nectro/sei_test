@@ -1,6 +1,6 @@
 const { generateTwiML } = require('../utils/twimlGenerator');
 const { logCall, logSpeech, logTransfer } = require('../utils/logger');
-const config = require('../config/constants');
+const config = require('../config');
 const AIService = require('../services/aiService');
 
 class VoiceController {

@@ -3,12 +3,13 @@
  */
 
 const { createClient } = require('@supabase/supabase-js');
+const config = require('./index');
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_ANON_KEY;
+const supabaseUrl = config.SUPABASE_URL;
+const supabaseKey = config.SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.warn('⚠️ Supabase credentials not found. Using local knowledge base.');
+  console.warn('⚠️ Supabase credentials not found. Knowledge base features will be limited.');
 }
 
 // Create Supabase client
