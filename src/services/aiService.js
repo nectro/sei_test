@@ -2,7 +2,7 @@
  * Simple AI Service for voice processing
  */
 
-const { knowledgeBase } = require('../data/knowledgeBase');
+const KnowledgeBaseService = require('./knowledgeBaseService');
 const { logInfo } = require('../utils/logger');
 const config = require('../config/constants');
 
@@ -10,7 +10,7 @@ class AIService {
   /**
    * Process user speech and find matching response
    */
-  static processUserInput(speechInput, confidence = 0) {
+  static async processUserInput(speechInput, confidence = 0) {
     logInfo('Processing voice input', { speechInput, confidence });
 
     const cleanInput = speechInput.toLowerCase().trim();
@@ -23,24 +23,29 @@ class AIService {
       };
     }
 
-    return this.findBestMatch(cleanInput);
+    return await this.findBestMatch(cleanInput);
   }
 
   /**
    * Find best matching response using hierarchy: questions -> keywords -> agent transfer
    */
-  static findBestMatch(input) {
+  static async findBestMatch(input) {
+    // Get knowledge base from Supabase
+    const knowledgeBase = await KnowledgeBaseService.getAllKnowledge();
+
     // Step 1: Try to match questions first
-    const questionMatch = this.matchQuestions(input);
+    const questionMatch = this.matchQuestions(input, knowledgeBase);
     if (questionMatch) {
       return questionMatch;
     }
 
     // Step 2: Try to match keywords
-    const keywordMatch = this.matchKeywords(input);
+    const keywordMatch = this.matchKeywords(input, knowledgeBase);
     if (keywordMatch) {
       return keywordMatch;
     }
+
+    // Next Step: can integrate open Ai to go through the knowledge base and find the best match
 
     // Step 3: No match found - transfer to agent
     return {
@@ -53,7 +58,7 @@ class AIService {
   /**
    * Match user input against questions
    */
-  static matchQuestions(input) {
+  static matchQuestions(input, knowledgeBase) {
     for (const [topic, data] of Object.entries(knowledgeBase)) {
       if (!data.questions) continue;
 
@@ -74,7 +79,7 @@ class AIService {
   /**
    * Match user input against keywords
    */
-  static matchKeywords(input) {
+  static matchKeywords(input, knowledgeBase) {
     for (const [topic, data] of Object.entries(knowledgeBase)) {
       if (!data.keywords) continue;
 

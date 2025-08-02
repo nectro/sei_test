@@ -20,12 +20,8 @@ class VoiceController {
     res.send(twiml);
   }
 
-
-
-
-
   // Process speech input from caller
-  static processInput(req, res) {
+  static async processInput(req, res) {
     const speechResult = req.body.SpeechResult || '';
     const confidence = parseFloat(req.body.Confidence || 0);
 
@@ -35,8 +31,8 @@ class VoiceController {
       callSid: req.body.CallSid
     });
 
-    // Process input with knowledge base
-    const aiResponse = AIService.processUserInput(speechResult, confidence);
+    // Process input with knowledge base (async)
+    const aiResponse = await AIService.processUserInput(speechResult, confidence);
     const formattedResponse = AIService.formatResponseForTwiML(aiResponse);
 
     let twimlType;
