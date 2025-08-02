@@ -88,6 +88,7 @@ instacall/
 1. Create project at [supabase.com](https://supabase.com)
 2. Run `supabase_knowledge_base.sql` in SQL Editor
 3. Get URL and anon key from Settings → API
+4. Configure knowledge base at [Knowledge Base Manager](https://knowledgebasevoice.netlify.app/)
 
 ### 2. Twilio Configuration
 1. Set webhook URL to: `https://your-domain.com/voice/greeting`
@@ -100,7 +101,60 @@ cp .env.example .env
 # Edit .env with your credentials
 ```
 
-## 📋 Call Flow
+## 📋 Call Flow Architecture
+
+### 🏗️ System Architecture Diagram
+
+The following diagram shows the complete voice agent flow from incoming call to response:
+
+```mermaid
+graph TD
+    A[Incoming Call] --> B[Twilio]
+    B --> C["/voice/greeting<br/>TwiML Response"]
+    C --> D["Say: Welcome Message<br/>Gather: Speech Input"]
+    D --> E[User Speech]
+    E --> F["/voice/process-input<br/>Speech Recognition"]
+    F --> G{Speech Confidence > 0.4?}
+    
+    G -->|No| H["Low Confidence<br/>Transfer to Agent"]
+    G -->|Yes| I[AI Service Processing]
+    
+    I --> J[Supabase Knowledge Base]
+    J --> K{Question Match<br/>70% Similarity?}
+    
+    K -->|Yes| L["Return Answer<br/>Continue Conversation"]
+    K -->|No| M{Keyword Match?}
+    
+    M -->|Yes| N["Return Answer<br/>Check if Agent Needed"]
+    M -->|No| O["No Match Found<br/>Transfer to Agent"]
+    
+    H --> P["/voice/transfer-agent<br/>DTMF Input"]
+    O --> P
+    N --> Q{Needs Agent?}
+    Q -->|Yes| P
+    Q -->|No| L
+    
+    P --> R["Press 1: Connect Agent<br/>Press 2: Continue AI"]
+    R --> S{User Choice}
+    S -->|1| T["Dial Agent Number<br/>Call Transfer"]
+    S -->|2| U["Continue with AI<br/>New Speech Input"]
+    S -->|Timeout| V["Hangup Call"]
+    
+    L --> W["Ask Follow-up Question<br/>Wait for Response"]
+    W --> X{User Responds?}
+    X -->|Yes| E
+    X -->|No| Y["Thank You Message<br/>Hangup"]
+    
+    T --> Z["Agent Connected<br/>End AI Session"]
+    U --> D
+    
+    style A fill:#e1f5fe
+    style J fill:#f3e5f5
+    style T fill:#e8f5e8
+    style Z fill:#e8f5e8
+```
+
+### 🔄 Flow Summary
 
 1. **Incoming Call** → `/voice/greeting` → Collect speech input
 2. **Speech Processing** → `/voice/process-input` → Query Supabase knowledge base
@@ -126,11 +180,28 @@ cp .env.example .env
 
 ## 🧠 Knowledge Base
 
+### 📊 Knowledge Base Structure
 - **6 Topics** - Company, availability, support, technical, urgent, greeting
 - **36 Questions** - Predefined natural language questions
-- **Smart Matching** - 40% similarity threshold for questions
+- **Smart Matching** - 70% similarity threshold for questions
 - **Keyword Fallback** - Exact keyword matching
 - **Agent Transfer** - Auto-transfer for technical/urgent/support topics
+
+### 🔧 Knowledge Base Configuration
+
+You can manage and configure your knowledge base using our web interface:
+
+**🌐 [Knowledge Base Manager](https://knowledgebasevoice.netlify.app/)**
+
+Features available in the web interface:
+- ✅ **Add/Edit Questions** - Manage predefined questions for each topic
+- ✅ **Keyword Management** - Configure fallback keywords
+- ✅ **Topic Configuration** - Set up new topics and categories  
+- ✅ **Answer Templates** - Create and edit response templates
+- ✅ **Testing Interface** - Test your knowledge base matching
+- ✅ **Export/Import** - Backup and restore your configuration
+
+**Note:** After updating your knowledge base through the web interface, the changes will automatically sync with your Supabase database and be available to your voice agent immediately.
 
 ## 📝 License
 
