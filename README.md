@@ -1,39 +1,42 @@
-# InstaCall Voice API
+# InstaCall Voice Agent
 
-A professional Node.js voice agent application built with Twilio TwiML for automated customer support calls.
+A simple and focused Node.js voice agent built with Twilio TwiML for automated customer support calls.
 
 ## 🚀 Features
 
-- **TwiML Voice Responses** - Professional voice interactions
-- **Speech Recognition** - Real-time speech-to-text processing
-- **Knowledge Base** - Smart question and keyword matching
+- **Smart Voice Responses** - AI-powered voice interactions
+- **Knowledge Base** - Supabase-powered question and keyword matching
 - **Agent Transfer** - Seamless handoff to human agents
-- **24/7 Availability** - Round-the-clock support
-- **Error Handling** - Robust error handling and logging
-- **Request Validation** - Twilio webhook signature validation
+- **24/7 Support** - Always available voice assistant
+- **3-Tier Matching** - Questions → Keywords → Agent Transfer
 
 ## 📁 Project Structure
 
 ```
 instacall/
 ├── src/
-│   ├── config/           # Configuration files
+│   ├── config/           # Configuration
 │   │   ├── constants.js  # App constants
-│   │   └── environment.js # Environment config
-│   ├── controllers/      # Business logic
-│   │   └── voiceController.js
+│   │   ├── environment.js # Environment config
+│   │   └── supabase.js   # Supabase client
+│   ├── controllers/      # Request handlers
+│   │   └── voiceController.js # Voice endpoints (3 only)
 │   ├── middleware/       # Express middleware
 │   │   ├── errorHandler.js
 │   │   ├── requestLogger.js
 │   │   └── validateTwilio.js
 │   ├── routes/          # API routes
-│   │   └── voice.js
-│   └── utils/           # Utility functions
-│       ├── logger.js
-│       └── twimlGenerator.js
+│   │   └── voice.js     # 3 voice endpoints
+│   ├── services/        # Business logic
+│   │   ├── aiService.js # Question/keyword matching
+│   │   └── knowledgeBaseService.js # Supabase integration
+│   └── utils/           # Utilities
+│       ├── logger.js    # Call logging
+│       └── twimlGenerator.js # TwiML templates
 ├── index.js             # Application entry point
+├── supabase_knowledge_base.sql # Database setup
 ├── package.json
-└── .env.example         # Environment variables template
+└── .env.example         # Environment template
 ```
 
 ## 🛠 Installation
@@ -63,81 +66,71 @@ instacall/
 | `TWILIO_AUTH_TOKEN` | Twilio auth token | - | Production |
 | `TWILIO_ACCOUNT_SID` | Twilio account SID | - | No |
 | `AGENT_PHONE_NUMBER` | Agent transfer number | `+1234567890` | No |
-| `HOLD_MUSIC_URL` | Hold music audio URL | Default | No |
+| `SUPABASE_URL` | Supabase project URL | - | Yes |
+| `SUPABASE_ANON_KEY` | Supabase anon key | - | Yes |
 | `CORS_ORIGIN` | CORS origin | `*` | No |
-| `LOG_LEVEL` | Logging level | `info` | No |
 
 ## 📞 API Endpoints
 
 ### Voice Endpoints (TwiML)
-- `POST /voice/greeting` - Main greeting for incoming calls
-- `POST /voice/process-input` - Speech input processing with knowledge base
-- `POST /voice/transfer-agent` - Agent transfer handling
+- `POST /voice/greeting` - Entry point for incoming calls
+- `POST /voice/process-input` - Speech processing with Supabase knowledge base
+- `POST /voice/transfer-agent` - Agent transfer or continue with AI
 
 ### Information Endpoints (JSON)
 - `GET /` - API welcome message
 - `GET /health` - Health check with system info
 - `GET /api/info` - API information and features
 
-## 🔧 Twilio Configuration
+## 🔧 Setup Instructions
 
-1. **Configure your Twilio phone number webhook URL:**
-   ```
-   https://your-domain.com/voice/greeting
-   ```
+### 1. Supabase Setup
+1. Create project at [supabase.com](https://supabase.com)
+2. Run `supabase_knowledge_base.sql` in SQL Editor
+3. Get URL and anon key from Settings → API
 
-2. **Enable required Twilio add-ons:**
-   - Speech Recognition (for voice input)
+### 2. Twilio Configuration
+1. Set webhook URL to: `https://your-domain.com/voice/greeting`
+2. Enable Speech Recognition add-on
+3. Get Auth Token from Twilio Console
 
-3. **Set environment variables:**
-   - `TWILIO_AUTH_TOKEN` (for webhook validation)
-   - `AGENT_PHONE_NUMBER` (for agent transfers)
+### 3. Environment Setup
+```bash
+cp .env.example .env
+# Edit .env with your credentials
+```
 
 ## 📋 Call Flow
 
-1. **Incoming Call** → Greeting → Speech Input Collection
-2. **Speech Recognition** → Question Matching → Keyword Matching → Agent Transfer
-3. **Smart Response** → Knowledge Base Answer or Agent Connection
-4. **24/7 Support** → Always available agents and responses
+1. **Incoming Call** → `/voice/greeting` → Collect speech input
+2. **Speech Processing** → `/voice/process-input` → Query Supabase knowledge base
+3. **Smart Matching** → Questions (70% similarity) → Keywords → Agent transfer
+4. **Response** → AI answer OR agent connection via `/voice/transfer-agent`
 
-## 🔒 Security Features
+## 🔒 Security
 
 - **Webhook Validation** - Verifies requests are from Twilio
-- **Environment-based Config** - Sensitive data in environment variables
-- **Error Handling** - Graceful error responses
-- **Request Logging** - Comprehensive request/response logging
+- **Environment Variables** - Secure credential storage
+- **Supabase RLS** - Row-level security enabled
 
 ## 🚀 Development
 
-**Available Scripts:**
-- `npm run dev` - Start development server with nodemon
-- `npm start` - Start production server
-- `npm test` - Run tests (placeholder)
+**Scripts:**
+- `npm run dev` - Start with nodemon
+- `npm start` - Production server
 
-**Development Features:**
-- Hot reload with nodemon
-- Detailed logging
-- Webhook validation bypass in development
-- Environment configuration validation
-
-## 📊 Monitoring
-
-The application includes comprehensive logging:
-- **Call Logs** - All incoming calls with metadata
-- **Speech Logs** - Speech recognition results
-- **Recording Logs** - Voicemail recordings
+**Logging:**
+- **Call Logs** - Incoming calls with metadata
+- **Speech Logs** - Speech recognition results  
 - **Transfer Logs** - Agent transfer requests
-- **Error Logs** - Application errors with stack traces
-- **Request Logs** - HTTP request/response cycles
 
-## 🔮 Future Enhancements
+## 🧠 Knowledge Base
 
-- AI/NLP integration for intelligent responses
-- Database integration for call history
-- Real-time analytics dashboard
-- Multi-language support
-- Advanced call routing
-- CRM integration
+- **6 Topics** - Company, availability, support, technical, urgent, greeting
+- **36 Questions** - Predefined natural language questions
+- **Smart Matching** - 40% similarity threshold for questions
+- **Keyword Fallback** - Exact keyword matching
+- **Agent Transfer** - Auto-transfer for technical/urgent/support topics
 
 ## 📝 License
 

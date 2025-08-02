@@ -16,13 +16,6 @@ function logSpeech(message, data = {}) {
   });
 }
 
-function logRecording(message, data = {}) {
-  console.log(`🎙️ ${message}:`, {
-    timestamp: new Date().toISOString(),
-    ...data
-  });
-}
-
 function logTransfer(message, data = {}) {
   console.log(`📞 ${message}:`, {
     timestamp: new Date().toISOString(),
@@ -53,7 +46,6 @@ function logInfo(message, data = {}) {
 module.exports = {
   logCall,
   logSpeech,
-  logRecording,
   logTransfer,
   logError,
   logInfo

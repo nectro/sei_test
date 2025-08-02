@@ -57,11 +57,11 @@ app.get('/api/info', (req, res) => {
       info: '/api/info'
     },
     features: [
-      'TwiML voice responses',
-      'Speech recognition',
-      'Knowledge base matching',
+      'Smart voice responses',
+      'Supabase knowledge base',
+      'Question & keyword matching',
       'Agent transfer',
-      '24/7 availability'
+      '24/7 support'
     ]
   });
 });

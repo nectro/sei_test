@@ -8,7 +8,7 @@ module.exports = {
   LANGUAGE: 'en-US',
   
   // Speech recognition settings
-  SPEECH_CONFIDENCE_THRESHOLD: 0.2,
+  SPEECH_CONFIDENCE_THRESHOLD: 0.4,
   SPEECH_TIMEOUT: 3,
   GATHER_TIMEOUT: 10,
   

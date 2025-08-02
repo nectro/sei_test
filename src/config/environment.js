@@ -13,9 +13,6 @@ const config = {
   TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
   TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
   
-  // Agent settings
-  AGENT_PHONE_NUMBER: process.env.AGENT_PHONE_NUMBER || '+1234567890',
-  
   // Audio settings
   HOLD_MUSIC_URL: process.env.HOLD_MUSIC_URL || 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
   
@@ -28,7 +25,7 @@ const config = {
 
 // Validate required environment variables
 function validateEnvironment() {
-  const required = [];
+  const required = ['PORT', 'NODE_ENV'];
   const missing = [];
 
   // Check for missing required variables
@@ -49,7 +46,6 @@ function validateEnvironment() {
     console.log(`   PORT: ${config.PORT}`);
     console.log(`   NODE_ENV: ${config.NODE_ENV}`);
     console.log(`   TWILIO_AUTH_TOKEN: ${config.TWILIO_AUTH_TOKEN ? '***configured***' : 'not set'}`);
-    console.log(`   AGENT_PHONE_NUMBER: ${config.AGENT_PHONE_NUMBER}`);
   }
 }
 
