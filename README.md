@@ -125,14 +125,11 @@ graph TD
     K -->|Yes| L["Return Answer<br/>Continue Conversation"]
     K -->|No| M{Keyword Match?}
     
-    M -->|Yes| N["Return Answer<br/>Check if Agent Needed"]
+    M -->|Yes| L
     M -->|No| O["No Match Found<br/>Transfer to Agent"]
     
     H --> P["/voice/transfer-agent<br/>DTMF Input"]
     O --> P
-    N --> Q{Needs Agent?}
-    Q -->|Yes| P
-    Q -->|No| L
     
     P --> R["Press 1: Connect Agent<br/>Press 2: Continue AI"]
     R --> S{User Choice}
